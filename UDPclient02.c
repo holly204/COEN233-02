@@ -51,6 +51,7 @@ int main()
 
 	
 	//1 corrcet packet
+	RequestPacket packet;
 	packet = generatePacket(4085546805, 04, 1);
 	send_packet(sockfd, &addr, &packet, addr_size);
 	
@@ -81,7 +82,7 @@ RequestPacket generatePacket(int ssNo, int tech, int n) {
         rp.SegmentNo = n;
 	rp.Technology = tech;
 	rp.SourceSubscriberNo = ssNo;
-        rp.Length = strlen(rp.Technology + rp.SourceSubscriberNo);
+        rp.Length = sizeof(rp.Technology + rp.SourceSubscriberNo);
         rp.EndPacketId = END_IDENTIFIER;
 
         return rp;
@@ -100,18 +101,10 @@ int send_packet(int sockfd, struct sockaddr_in *addr, RequestPacket *rp, socklen
 	printf("begin packet receive");
 	addr_size = sizeof(addr);	
 	
-	//buffer =  malloc(sizeof(RejectPacket));
-	//buffer[1024];
-	ResponsePacket *rsp = malloc(sizeof(ResponsePacket));
-	buffer = (uint8_t *)(ap);
-
-	int rev_pack = recvfrom(sockfd, buffer, sizeof(ResponsePacket), 0, (struct sockaddr*)&addr, &addr_size);
-	printf("ACC_PER received %d bytes\n", rev_pack);
-	printf("buffer size:%d", sizeof(buffer));
-        for(int i = 0; i < sizeof(buffer); i++) {
-                printf("%x ", buffer[i]);
-        }
-
+	uint8_t response[sizeof(ResponsePacket)] = {0};
+	int rev_back = recvfrom(sockfd, response, sizeof(response), 0, (struct sockaddr*)&addr, &addr_size);
+	//show_resp(*response);
+	printf("Respoinse Packet received %d bytes\n", rev_back);
 	return ret;
 }
 void show_req(struct RequestPacket rpt){
@@ -130,10 +123,10 @@ void show_resp(struct ResponsePacket rsp){
         printf("\nStart of Packet id:%x ", rsp.StartPacketId);
         printf("\nClient id:%x ", rsp.ClientId);
         printf("\ndata:%x ", rsp.data);
-        printf("\nSegment No:%x ", rpt.SegmentNo);
-	printf("\nLength:%x ", rpt.Length);
-	printf("\nTechnology:%x ", rpt.Technology);
-	printf("\nSourceSubscriberNo:%x ", rpt.SourceSubscriberNo);
+        printf("\nSegment No:%x ", rsp.SegmentNo);
+	printf("\nLength:%x ", rsp.Length);
+	printf("\nTechnology:%x ", rsp.Technology);
+	printf("\nSourceSubscriberNo:%x ", rsp.SourceSubscriberNo);
         printf("\nEnd of Packet id:%x \n", rsp.EndPacketId);
 }
 

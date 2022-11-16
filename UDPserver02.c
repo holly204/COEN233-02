@@ -84,14 +84,10 @@ int receive_packet(int sockfd,struct sockaddr_in *client_addr, socklen_t addr_si
 		printf("request packetreceived %d bytes\n", rev);
 		show_req(*rp);
 
-		ResponsePacket *rsp = malloc(sizeof(ResponsePacket));
-		*rsp = generate_recv(*rp);
-		//show_ack(*ap);
-		buffer = (uint8_t *)rp;
-
+		uint8_t response[sizeof(ResponsePacket)] = {0};
 		// Must use the addr_size from the previous recvfrom to specify addr length
-		int send_ack = sendto(sockfd, buffer, sizeof(ResponsePacket), 0, (struct sockaddr*)&client_addr, addr_size);
-		printf("ACcess send ack %d bytes, errno=%d\n", send_ack, errno);
+		int send_ack = sendto(sockfd, buffer, sizeof(buffer), 0, (struct sockaddr*)&client_addr, addr_size);
+		printf("ACcess send ack %d bytes\n", send_ack);
 
 	}	
        	return rev;
@@ -112,10 +108,10 @@ void show_resp(struct ResponsePacket rsp){
         printf("\nStart of Packet id:%x ", rsp.StartPacketId);
         printf("\nClient id:%x ", rsp.ClientId);
         printf("\ndata:%x ", rsp.data);
-        printf("\nSegment No:%x ", rpt.SegmentNo);
-	printf("\nLength:%x ", rpt.Length);
-	printf("\nTechnology:%x ", rpt.Technology);
-	printf("\nSourceSubscriberNo:%x ", rpt.SourceSubscriberNo);
+        printf("\nSegment No:%x ", rsp.SegmentNo);
+	printf("\nLength:%x ", rsp.Length);
+	printf("\nTechnology:%x ", rsp.Technology);
+	printf("\nSourceSubscriberNo:%x ", rsp.SourceSubscriberNo);
         printf("\nEnd of Packet id:%x \n", rsp.EndPacketId);
 }
 

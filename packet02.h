@@ -23,18 +23,18 @@ typedef struct RequestPacket {
 	uint8_t Length;
 	uint8_t Technology;
 	unsigned int SourceSubscriberNo;
-	uint16_t EndPacket;
-};
+	uint16_t EndPacketId;
+}RequestPacket;
 // Structure of response packet
 typedef struct ResponsePacket {
 	uint16_t StartPacketId;
 	uint8_t ClientId;
 	uint16_t data;
-	uint8_t SegmentNp;
+	uint8_t SegmentNo;
 	uint8_t Length;
 	uint8_t Technology;
 	unsigned int SourceSubscriberNo;
-	uint16_t EndPacket;
-};
+	uint16_t EndPacketId;
+}ResponsePacket;
 
 #endif
