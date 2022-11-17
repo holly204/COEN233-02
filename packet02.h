@@ -37,4 +37,10 @@ typedef struct ResponsePacket {
 	uint16_t EndPacketId;
 }ResponsePacket;
 
+// structure SubscriberData
+typedef struct SubscriberData {
+	unsigned subscriberNo;
+	uint8_t Technology;
+	int Paid; //1: paid, 0: not paid, -1:not exist
+}SubscriberData;
 #endif

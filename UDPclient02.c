@@ -20,7 +20,7 @@ Student ID: W1641460
 #define function
 void show_req(struct RequestPacket rpt);
 void show_resp(struct ResponsePacket rsp);
-RequestPacket generatePacket(int n, int tech, int ssNo);
+RequestPacket generatePacket(char *ssNo, char *tech, int n);
 int send_packet(int sockfd, struct sockaddr_in *addr, RequestPacket *rp, socklen_t addr_size);
 
 int main()
@@ -50,9 +50,11 @@ int main()
         addr.sin_addr.s_addr = inet_addr(ip);
 
 	
+	char ssNo[]= "4085546805";
+	char tech[]= "04";
 	//1 corrcet packet
 	RequestPacket packet;
-	packet = generatePacket(4085546805, 04, 1);
+	packet = generatePacket(ssNo, tech, 1);
 	send_packet(sockfd, &addr, &packet, addr_size);
 	
 	//2 not paid
@@ -71,7 +73,7 @@ int main()
 	return 0;
 }
 
-RequestPacket generatePacket(int ssNo, int tech, int n) {
+RequestPacket generatePacket(char *ssNo, char *tech, int n) {
 
 
         struct RequestPacket rp;
@@ -80,8 +82,12 @@ RequestPacket generatePacket(int ssNo, int tech, int n) {
         rp.ClientId = 11;
         rp.AccPer = ACC_PER;
         rp.SegmentNo = n;
-	rp.Technology = tech;
-	rp.SourceSubscriberNo = ssNo;
+	rp.Technology = atoi(tech);
+	rp.SourceSubscriberNo =  atoi(ssNo);
+	printf("rp.SourceSubscriberNo: %d\n", rp.SourceSubscriberNo);
+//	char combine[];
+//	strcpy(combine, ssNo);
+//	strcat(combine, tech);
         rp.Length = sizeof(rp.Technology + rp.SourceSubscriberNo);
         rp.EndPacketId = END_IDENTIFIER;
 
