@@ -56,6 +56,9 @@ int main()
 	
 	struct SubscriberData subscriber[LINE];
 	readFile(subscriber);
+	//for(int a=0; a <=LINE; a++){
+	//	printf("subscriberNo:%d", subscriber->subscriberNo);
+	//}
         receive_packet(sockfd, &client_addr, addr_size, subscriber);
 
 	return 0;
@@ -126,17 +129,22 @@ void readFile(struct SubscriberData subscriber[]) {
 	{
 		printf("Error opening file\n");
 	}
+	
 	while (fgets(str, sizeof(str), fp) != NULL)
 	{
-		char * token;
+		char *token;
 		token = strtok(str," ");
-		subscriber[i].subscriberNo = (unsigned) atol(token);
+		printf("token: %s", token);
+		subscriber[i].subscriberNo = (unsigned) atoi(token);
+		printf("subscriberN: %u\n", subscriber[i].subscriberNo);
 		token = strtok(NULL," ");
 		subscriber[i].Technology = atoi(token);
 		token = strtok(NULL," ");
+		//printf("token: s", token);
 		subscriber[i].Paid = atoi(token);
 		i++;
 	}
+
 	fclose(fp);
 }
 //verify subscriberNo and Technology 
