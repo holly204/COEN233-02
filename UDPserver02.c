@@ -56,9 +56,6 @@ int main()
 	
 	struct SubscriberData subscriber[LINE];
 	readFile(subscriber);
-	//for(int a=0; a <=LINE; a++){
-	//	printf("subscriberNo:%d", subscriber->subscriberNo);
-	//}
         receive_packet(sockfd, &client_addr, addr_size, subscriber);
 
 	return 0;
@@ -74,7 +71,6 @@ ResponsePacket generate_recv(struct RequestPacket rqt){
 	rsp.Technology = rqt.Technology;
 	rsp.SourceSubscriberNo = rqt.SourceSubscriberNo;
 	rsp.EndPacketId = END_IDENTIFIER;
-	//printf("Generate ACK");
 	return rsp;
 }
 
@@ -84,7 +80,6 @@ int receive_packet(int sockfd,struct sockaddr_in *client_addr, socklen_t addr_si
         // 2. read Verification_Database.txt to check access or denied
         // 3. send packet back to client.
 	int rev = 1;
-	//RequestPacket *rp = malloc(sizeof(RequestPacket));
 	RequestPacket *rp;
 	while(rev>0){
 		addr_size = sizeof(client_addr);
@@ -100,13 +95,12 @@ int receive_packet(int sockfd,struct sockaddr_in *client_addr, socklen_t addr_si
 		
 		if (pay == 1){
 			rsp->data = ACCESS_OK;
-		}else if(pay = 0){
+		}else if(pay == 0){
 			rsp->data = NOTPAID;
 		}
 		else{
 			rsp->data = NOTEXIST;
 		}
-		//uint8_t response[sizeof(ResponsePacket)] = {0};
 		// Must use the addr_size from the previous recvfrom to specify addr length
 		int send_ack = sendto(sockfd, rsp, sizeof(ResponsePacket), 0, (struct sockaddr*)&client_addr, addr_size);
 		show_resp(*rsp);
@@ -117,8 +111,6 @@ int receive_packet(int sockfd,struct sockaddr_in *client_addr, socklen_t addr_si
 }
 //read file
 void readFile(struct SubscriberData subscriber[]) {
-
-
 	char str[30];
 	int i = 0;
 	FILE *fp;
@@ -134,13 +126,11 @@ void readFile(struct SubscriberData subscriber[]) {
 	{
 		char *token;
 		token = strtok(str," ");
-		printf("token: %s", token);
+		//printf("token: %s", token);
 		subscriber[i].subscriberNo = (unsigned) atoi(token);
-		printf("subscriberN: %u\n", subscriber[i].subscriberNo);
 		token = strtok(NULL," ");
 		subscriber[i].Technology = atoi(token);
 		token = strtok(NULL," ");
-		//printf("token: s", token);
 		subscriber[i].Paid = atoi(token);
 		i++;
 	}
@@ -151,14 +141,19 @@ void readFile(struct SubscriberData subscriber[]) {
 int verify (struct SubscriberData subscriber[],unsigned int subscriberNo,uint8_t Technology) {
 	int status = -1;// -1 Not exit
 	for (int j = 0; j < LINE; j++) {
+		//printf("\nscriberNo:%u ", subscriber[j].subscriberNo);
+		//printf("\npacketscriberNo:%u ", subscriberNo);
+		//printf("\n.Technology:%d ", subscriber[j].Technology);
+		//printf("\n.packetTechnology:%d ", Technology);
 		if (subscriber[j].subscriberNo == subscriberNo && subscriber[j].Technology == Technology) {
-			return subscriber[j].Paid;
+			status = subscriber[j].Paid;
+			printf("status :%d", status);
 		}
-		else{
-			return status;
-		}
+		
 	}
+	return status;
 }
+
 
 
 void show_req(struct RequestPacket rpt){

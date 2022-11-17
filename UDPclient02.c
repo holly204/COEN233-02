@@ -35,7 +35,7 @@ int main()
 	//create socket
     	sockfd = socket(AF_INET, SOCK_DGRAM, 0);
 	
-	//set ack_timer
+	//set ack_timer s seconds
 	struct timeval ack_timer;
 	// Timeout Value as required
 	ack_timer.tv_sec = 3;
@@ -48,26 +48,33 @@ int main()
         addr.sin_family = AF_INET;
         addr.sin_port = htons(PORT);
         addr.sin_addr.s_addr = inet_addr(ip);
-
-	
-	char ssNo[]= "4085546805";
-	char tech[]= "04";
-	//1 corrcet packet
 	RequestPacket packet;
-	packet = generatePacket(ssNo, tech, 1);
+
+
+	//1 corrcet packet
+	char ssNo1[]= "4085546805";
+	char tech1[]= "04";
+	packet = generatePacket(ssNo1, tech1, 1);
 	send_packet(sockfd, &addr, &packet, addr_size);
-	
-	//2 not paid
-	//packet = generatePacket(4086668821, 03, 2);
-	//send_packet(sockfd, &addr, &packet, addr_size);
+
+	//2 not paidi
+	char ssNo2[]= "4086668821";
+	char tech2[]= "03";
+	packet = generatePacket(ssNo2, tech2, 2);
+	send_packet(sockfd, &addr, &packet, addr_size);
 
 	//3 not exit (Subscriber number is not found)
-	//packet = generatePacket(4086808822, 02, 3);
-	//send_packet(sockfd, &addr, &packet, addr_size);
+	
+	char ssNo3[]= "4086808829";
+	char tech3[]= "03";
+	packet = generatePacket(ssNo3, tech3, 3);
+	send_packet(sockfd, &addr, &packet, addr_size);
 	
 	//4 not exit (Subscriber number is found, but the technology does not match)
-	//packet = generatePacket(4086808822, 02, 4);
-	//send_packet(sockfd, &addr, &packet, addr_size);
+	char ssNo4[]= "4086808821";
+	char tech4[]= "05";
+	packet = generatePacket(ssNo4, tech4, 4);
+	send_packet(sockfd, &addr, &packet, addr_size);
 
 
 	return 0;
