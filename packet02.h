@@ -10,7 +10,6 @@
 #define  ACC_PER 0XFFF8
 #define ACCESS_OK 0XFFFB
 
-#define PAID 0XFFFB
 #define NOTPAID 0XFFF9
 #define NOTEXIST 0XFFFA
 

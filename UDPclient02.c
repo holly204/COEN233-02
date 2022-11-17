@@ -102,14 +102,15 @@ int send_packet(int sockfd, struct sockaddr_in *addr, RequestPacket *rp, socklen
 	buffer = (uint8_t *)(rp);
         int ret = sendto(sockfd, buffer, sizeof(*rp),0, (struct sockaddr *)addr, sizeof(*addr));
 	printf("Request Packet send %d bytes\n", ret);
-
+	show_req(*rp);
 	//receive packet
 	printf("begin packet receive");
 	addr_size = sizeof(addr);	
 	
-	uint8_t response[sizeof(ResponsePacket)] = {0};
-	int rev_back = recvfrom(sockfd, response, sizeof(response), 0, (struct sockaddr*)&addr, &addr_size);
-	//show_resp(*response);
+	ResponsePacket * rsp = malloc(sizeof(ResponsePacket));
+	//uint8_t response[sizeof(ResponsePacket)] = {0};
+	int rev_back = recvfrom(sockfd, rsp, sizeof(ResponsePacket), 0, (struct sockaddr*)&addr, &addr_size);
+	show_resp(*rsp);
 	printf("Respoinse Packet received %d bytes\n", rev_back);
 	return ret;
 }

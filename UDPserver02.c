@@ -20,11 +20,12 @@ Student ID: W1641460
 
 
 #define function
+void readFile (struct SubscriberData subscriber[]);
+ResponsePacket generate_recv(struct RequestPacket rqt);
+
 void show_req(struct RequestPacket rpt);
 void show_resp(struct ResponsePacket rsp);
-void readFile (struct SubscriberData subscriber[]);
 int verify (struct SubscriberData subscriber[],unsigned int subscriberNo,uint8_t Technology);
-ResponsePacket generate_recv(struct RequestPacket rqt);
 int receive_packet(int sockfd,struct sockaddr_in *client_addr, socklen_t addr_size, struct SubscriberData *subscriber);
 int main()
 {
@@ -89,11 +90,23 @@ int receive_packet(int sockfd,struct sockaddr_in *client_addr, socklen_t addr_si
 		printf("request packetreceived %d bytes\n", rev);
 		show_req(*rp);
 		
-		verify (subscriber, rp->SourceSubscriberNo, rp->Technology);
-
-		uint8_t response[sizeof(ResponsePacket)] = {0};
+		ResponsePacket * rsp = malloc(sizeof(ResponsePacket));
+		
+		*rsp = generate_recv(*rp); 		
+		int pay = verify (subscriber, rp->SourceSubscriberNo, rp->Technology);
+		
+		if (pay == 1){
+			rsp->data = ACCESS_OK;
+		}else if(pay = 0){
+			rsp->data = NOTPAID;
+		}
+		else{
+			rsp->data = NOTEXIST;
+		}
+		//uint8_t response[sizeof(ResponsePacket)] = {0};
 		// Must use the addr_size from the previous recvfrom to specify addr length
-		int send_ack = sendto(sockfd, buffer, sizeof(buffer), 0, (struct sockaddr*)&client_addr, addr_size);
+		int send_ack = sendto(sockfd, rsp, sizeof(ResponsePacket), 0, (struct sockaddr*)&client_addr, addr_size);
+		show_resp(*rsp);
 		printf("ACcess send ack %d bytes\n", send_ack);
 
 	}	
@@ -138,6 +151,8 @@ int verify (struct SubscriberData subscriber[],unsigned int subscriberNo,uint8_t
 		}
 	}
 }
+
+
 void show_req(struct RequestPacket rpt){
         printf("\nStart of Packet id: %x ", rpt.StartPacketId);
         printf("\nClient ID:%hhx ", rpt.ClientId);
