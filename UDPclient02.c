@@ -126,7 +126,7 @@ void show_req(struct RequestPacket rpt){
         printf("***Client ID:%hhx ", rpt.ClientId);
         printf("***AccPer:%x",ACC_PER);
         printf("***Segment No:%d ", rpt.SegmentNo);
-        printf("***Length:%d ", rpt.SegmentNo);
+        printf("***Length:%d ", rpt.Length);
 	printf("***Technology:%d ", rpt.Technology);
         printf("***SourceSubscriberNo:%u ", rpt.SourceSubscriberNo);
         printf("***End of Packet id:%x \n", rpt.EndPacketId);
