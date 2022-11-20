@@ -162,19 +162,22 @@ void show_resp(struct ResponsePacket rsp){
 	printf("************Send Response packet to client*******************\n");
         printf("Start of Packet id:%x \n", rsp.StartPacketId);
         printf("Client id:%d \n", rsp.ClientId);
-        if (rsp.data == ACCESS_OK){
-		printf("Acc_OK:%x \n", ACCESS_OK);
-	}else if (rsp.data == NOTPAID){
-		printf("Not paid: %x\n", NOTPAID);
-	}else if(rsp.data == NOTEXIST){
-		printf("Not exist: %x\n", NOTEXIST);
-	}else{
-		printf("ERROR");
-	}
-	//printf("data:%x \n", rsp.data);
+	printf("data:%x \n", rsp.data);
         printf("Segment No:%d \n", rsp.SegmentNo);
 	printf("Length:%d \n", rsp.Length);
 	printf("Technology:%d \n", rsp.Technology);
 	printf("SourceSubscriberNo:%u \n", rsp.SourceSubscriberNo);
         printf("End of Packet id:%x \n", rsp.EndPacketId);
+
+        if (rsp.data == ACCESS_OK){
+                printf("ClientID: %d Subscriber No: %u Technology: %d is Acc_OK\n", rsp.ClientId, rsp.SourceSubscriberNo, rsp.Technology);
+        }else if (rsp.data == NOTPAID){
+                printf("ClientID: %d Subscriber No: %u Technology: %d is Not Paid\n", rsp.ClientId, rsp.SourceSubscriberNo, rsp.Technology);
+        }else if(rsp.data == NOTEXIST){
+                printf("ClientID: %d Subscriber No: %u Technology: %d is Not Exist\n", rsp.ClientId, rsp.SourceSubscriberNo, rsp.Technology);
+        }else{
+                printf("ERROR");
+        }
+
 }
+
