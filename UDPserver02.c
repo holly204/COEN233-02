@@ -162,7 +162,16 @@ void show_resp(struct ResponsePacket rsp){
 	printf("************Send Response packet to client*******************\n");
         printf("Start of Packet id:%x \n", rsp.StartPacketId);
         printf("Client id:%d \n", rsp.ClientId);
-        printf("data:%x \n", rsp.data);
+        if (rsp.data == ACCESS_OK){
+		printf("Acc_OK:%x \n", ACCESS_OK);
+	}else if (rsp.data == NOTPAID){
+		printf("Not paid: %x\n", NOTPAID);
+	}else if(rsp.data == NOTEXIST){
+		printf("Not exist: %x\n", NOTEXIST);
+	}else{
+		printf("ERROR");
+	}
+	//printf("data:%x \n", rsp.data);
         printf("Segment No:%d \n", rsp.SegmentNo);
 	printf("Length:%d \n", rsp.Length);
 	printf("Technology:%d \n", rsp.Technology);
