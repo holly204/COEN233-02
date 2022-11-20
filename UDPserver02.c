@@ -85,7 +85,6 @@ int receive_packet(int sockfd,struct sockaddr_in *client_addr, socklen_t addr_si
 		addr_size = sizeof(client_addr);
 		uint8_t *buffer = (uint8_t *)rp;
         	rev = recvfrom(sockfd, buffer, sizeof(RequestPacket), 0,(struct sockaddr*)&client_addr, &addr_size);
-		printf("request packet received: %d bytes\n", rev);
 		show_req(*rp);
 		
 		ResponsePacket * rsp = malloc(sizeof(ResponsePacket));
@@ -103,7 +102,6 @@ int receive_packet(int sockfd,struct sockaddr_in *client_addr, socklen_t addr_si
 		}
 		// Must use the addr_size from the previous recvfrom to specify addr length
 		int send_ack = sendto(sockfd, rsp, sizeof(ResponsePacket), 0, (struct sockaddr*)&client_addr, addr_size);
-		printf("Response packed send: %d bytes\n", send_ack);
 		show_resp(*rsp);
 	}	
        	return rev;
@@ -148,24 +146,26 @@ int verify (struct SubscriberData subscriber[],unsigned int subscriberNo,uint8_t
 	return status;
 }
 void show_req(struct RequestPacket rpt){
-        printf("***Start of Packet id: %x ", rpt.StartPacketId);
-        printf("***Client ID:%hhx ", rpt.ClientId);
-        printf("***AccPer:%x",ACC_PER);
-        printf("***Segment No:%d ", rpt.SegmentNo);
-        printf("***Length:%d ", rpt.Length);
-	printf("***Technology:%d ", rpt.Technology);
-        printf("***SourceSubscriberNo:%u ", rpt.SourceSubscriberNo);
-        printf("***End of Packet id:%x \n", rpt.EndPacketId);
+	printf("************Request packet from client*******************\n");
+        printf("Start of Packet id: %x \n", rpt.StartPacketId);
+        printf("Client ID:%d \n", rpt.ClientId);
+        printf("AccPer:%x\n",ACC_PER);
+        printf("Segment No:%d \n", rpt.SegmentNo);
+        printf("Length:%d \n", rpt.Length);
+	printf("Technology:%d \n", rpt.Technology);
+        printf("SourceSubscriberNo:%u \n", rpt.SourceSubscriberNo);
+        printf("End of Packet id:%x \n", rpt.EndPacketId);
 
 }
 void show_resp(struct ResponsePacket rsp){
 
-        printf("***Start of Packet id:%x ", rsp.StartPacketId);
-        printf("***Client id:%hhx ", rsp.ClientId);
-        printf("***data:%x ", rsp.data);
-        printf("***Segment No:%d ", rsp.SegmentNo);
-	printf("***Length:%d ", rsp.Length);
-	printf("***Technology:%d ", rsp.Technology);
-	printf("***SourceSubscriberNo:%u ", rsp.SourceSubscriberNo);
-        printf("***End of Packet id:%x \n", rsp.EndPacketId);
+	printf("************Send Response packet to client*******************\n");
+        printf("Start of Packet id:%x \n", rsp.StartPacketId);
+        printf("Client id:%d \n", rsp.ClientId);
+        printf("data:%x \n", rsp.data);
+        printf("Segment No:%d \n", rsp.SegmentNo);
+	printf("Length:%d \n", rsp.Length);
+	printf("Technology:%d \n", rsp.Technology);
+	printf("SourceSubscriberNo:%u \n", rsp.SourceSubscriberNo);
+        printf("End of Packet id:%x \n", rsp.EndPacketId);
 }

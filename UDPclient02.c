@@ -91,10 +91,6 @@ RequestPacket generatePacket(char *ssNo, char *tech, int n) {
         rp.SegmentNo = n;
 	rp.Technology = atoi(tech);
 	rp.SourceSubscriberNo =  atoi(ssNo);
-	//printf("rp.SourceSubscriberNo: %d\n", rp.SourceSubscriberNo);
-//	char combine[];
-//	strcpy(combine, ssNo);
-//	strcat(combine, tech);
         rp.Length = sizeof(rp.Technology + rp.SourceSubscriberNo);
         rp.EndPacketId = END_IDENTIFIER;
 
@@ -108,38 +104,47 @@ int send_packet(int sockfd, struct sockaddr_in *addr, RequestPacket *rp, socklen
 	uint8_t *buffer;
 	buffer = (uint8_t *)(rp);
         int ret = sendto(sockfd, buffer, sizeof(*rp),0, (struct sockaddr *)addr, sizeof(*addr));
-	printf("Request Packet send %d bytes\n", ret);
 	show_req(*rp);
+	
 	//receive packet
-	printf("begin packet receive");
 	addr_size = sizeof(addr);	
 	
 	ResponsePacket * rsp = malloc(sizeof(ResponsePacket));
 	//uint8_t response[sizeof(ResponsePacket)] = {0};
 	int rev_back = recvfrom(sockfd, rsp, sizeof(ResponsePacket), 0, (struct sockaddr*)&addr, &addr_size);
-	printf("Respoinse Packet received %d bytes\n", rev_back);
 	show_resp(*rsp);
 	return ret;
 }
 void show_req(struct RequestPacket rpt){
-        printf("***Start of Packet id: %x ", rpt.StartPacketId);
-        printf("***Client ID:%hhx ", rpt.ClientId);
-        printf("***AccPer:%x",ACC_PER);
-        printf("***Segment No:%d ", rpt.SegmentNo);
-        printf("***Length:%d ", rpt.Length);
-	printf("***Technology:%d ", rpt.Technology);
-        printf("***SourceSubscriberNo:%u ", rpt.SourceSubscriberNo);
-        printf("***End of Packet id:%x \n", rpt.EndPacketId);
+        printf("*************Send request packet to server*****************\n");
+	printf("Start of Packet id: %x \n", rpt.StartPacketId);
+        printf("Client ID:%d \n", rpt.ClientId);
+        printf("AccPer:%x\n",ACC_PER);
+        printf("Segment No:%d \n", rpt.SegmentNo);
+        printf("Length:%d \n", rpt.Length);
+	printf("Technology:%d \n", rpt.Technology);
+        printf("SourceSubscriberNo:%u \n", rpt.SourceSubscriberNo);
+        printf("End of Packet id:%x \n", rpt.EndPacketId);
 
 }
 void show_resp(struct ResponsePacket rsp){
-
-        printf("***Start of Packet id:%x ", rsp.StartPacketId);
-        printf("***Client id:%hhx ", rsp.ClientId);
-        printf("***data:%x ", rsp.data);
-        printf("***Segment No:%d ", rsp.SegmentNo);
-	printf("***Length:%d ", rsp.Length);
-	printf("***Technology:%d ", rsp.Technology);
-	printf("***SourceSubscriberNo:%u ", rsp.SourceSubscriberNo);
-        printf("***End of Packet id:%x \n", rsp.EndPacketId);
+	
+	 printf("*************Receive response packet from server*****************\n");
+	 printf("Start of Packet id:%x \n", rsp.StartPacketId);
+	 printf("Client id:%d \n", rsp.ClientId);
+	 if (rsp.data == ACCESS_OK){
+		printf("Acc_OK:%x \n", ACCESS_OK);
+	}else if (rsp.data == NOTPAID){
+		printf("Not paid: %x\n", NOTPAID);
+	}else if(rsp.data == NOTEXIST){
+		printf("Not exist: %x\n", NOTEXIST);
+	}else{
+		printf("ERROR");
+	}
+        //printf("data:%x \n", rsp.data);
+        printf("Segment No:%d \n", rsp.SegmentNo);
+	printf("Length:%d \n", rsp.Length);
+	printf("Technology:%d \n", rsp.Technology);
+	printf("SourceSubscriberNo:%u \n", rsp.SourceSubscriberNo);
+        printf("End of Packet id:%x \n", rsp.EndPacketId);
 }
