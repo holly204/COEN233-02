@@ -12,6 +12,7 @@ Student ID: W1641460
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <unistd.h>
 #include "packet02.h"
 
 //define port
@@ -75,7 +76,7 @@ int main()
 	char tech4[]= "05";
 	packet = generatePacket(ssNo4, tech4, 4);
 	send_packet(sockfd, &addr, &packet, addr_size);
-
+	close(sockfd);
 
 	return 0;
 }

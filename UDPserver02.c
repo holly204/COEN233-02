@@ -11,6 +11,7 @@ Student ID: W1641460
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <unistd.h>
 #include <errno.h>
 #include "packet02.h"
 
@@ -57,7 +58,7 @@ int main()
 	struct SubscriberData subscriber[LINE];
 	readFile(subscriber);
         receive_packet(sockfd, &client_addr, addr_size, subscriber);
-
+	close(sockfd);
 	return 0;
 }
 
