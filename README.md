@@ -2,8 +2,6 @@
 COEN 233 Computer Networks
 Client using customized protocol on top of UDP protocol for requesting identification from server for access permission to the network.
 
-Name:Li Huang 
-StudentID:W1641460
 
 The program contains four files:
 a header file : packet02.h;
